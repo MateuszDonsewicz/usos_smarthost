@@ -1,0 +1,16 @@
+{
+  "name": "usos-api-staff-index",
+  "version": "1.0.0",
+  "description": "A simple Node.js app to fetch staff data from USOS API",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "crypto": "^1.0.1",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "oauth-1.0a": "^2.2.6"
+  }
+}

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista Pracowników</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            cursor: pointer;
+        }
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .pagination a {
+            margin: 0 5px;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            color: #007bff;
+        }
+        .pagination a.active {
+            background-color: #007bff;
+            color: white;
+            border: 1px solid #007bff;
+        }
+        .pagination a.disabled {
+            color: #ccc;
+            pointer-events: none;
+        }
+        nav {
+            margin-bottom: 20px;
+        }
+        nav a {
+            margin-right: 10px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h2>Pracownicy Naukowi</h2>
+    <table id="academicStaffTable">
+        <thead>
+            <tr>
+                <th onclick="sortTable('academicStaffTable', 0)">Imię i Nazwisko</th>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Numery Telefonów</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% academic_staff.forEach(staff_member => { %>
+            <tr>
+                <td><%= staff_member.name %></td>
+                <td><%= staff_member.user_id %></td>
+                <td>
+                    <% if (staff_member.email_access === 'require_captcha') { %>
+                        <a href="/verify-captcha?user_id=<%= staff_member.user_id %>">Verify CAPTCHA</a>
+                    <% } else { %>
+                        <%= staff_member.email %>
+                    <% } %>
+                </td>
+                <td><%= staff_member.phone_numbers.join(', ') %></td>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <h2>Pracownicy Administracji</h2>
+    <table id="nonAcademicStaffTable">
+        <thead>
+            <tr>
+                <th onclick="sortTable('nonAcademicStaffTable', 0)">Imię i Nazwisko</th>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Numery Telefonów</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% non_academic_staff.forEach(staff_member => { %>
+            <tr>
+                <td><%= staff_member.name %></td>
+                <td><%= staff_member.user_id %></td>
+                <td>
+                    <% if (staff_member.email_access === 'require_captcha') { %>
+                        <a href="/verify-captcha?user_id=<%= staff_member.user_id %>">Verify CAPTCHA</a>
+                    <% } else { %>
+                        <%= staff_member.email %>
+                    <% } %>
+                </td>
+                <td><%= staff_member.phone_numbers.join(', ') %></td>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        <% if (current_page > 0) { %>
+            <a href="/staff?query=<%= query %>&page=<%= current_page - 1 %>">Poprzednia</a>
+        <% } else { %>
+            <a class="disabled">Poprzednia</a>
+        <% } %>
+        
+        <% if (next_page) { %>
+            <a href="/staff?query=<%= query %>&page=<%= current_page + 1 %>">Następna</a>
+        <% } else { %>
+            <a class="disabled">Następna</a>
+        <% } %>
+    </div>
+
+    <script>
+        function sortTable(tableId, colIndex) {
+            var table = document.getElementById(tableId);
+            var rows = table.rows;
+            var switching = true;
+            var shouldSwitch;
+            var i;
+            var x, y;
+            var switchCount = 0;
+            var direction = "asc";
+
+            while (switching) {
+                switching = false;
+                var rowsArray = Array.from(rows).slice(1);
+
+                for (i = 0; i < rowsArray.length - 1; i++) {
+                    shouldSwitch = false;
+                    x = rowsArray[i].getElementsByTagName("TD")[colIndex];
+                    y = rowsArray[i + 1].getElementsByTagName("TD")[colIndex];
+
+                    if (direction === "asc") {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (direction === "desc") {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (shouldSwitch) {
+                    rowsArray[i].parentNode.insertBefore(rowsArray[i + 1], rowsArray[i]);
+                    switching = true;
+                    switchCount++;
+                } else {
+                    if (switchCount === 0 && direction === "asc") {
+                        direction = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Verify CAPTCHA</title>
+</head>
+<body>
+    <h1>Verify CAPTCHA for Email Access</h1>
+    <form action="/verify-captcha" method="post">
+        <input type="hidden" name="user_id" value="<%= user_id %>">
+        <input type="hidden" name="auth_header" value='<%= auth_header %>'>
+        <img src="<%= captcha_image_url %>" alt="CAPTCHA Image"> <!-- Update variable name to captcha_image_url -->
+        <label for="captcha_response">Enter CAPTCHA:</label>
+        <input type="text" id="captcha_response" name="captcha_response" required>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

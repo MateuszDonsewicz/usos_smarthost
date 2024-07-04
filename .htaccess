@@ -1,0 +1,6 @@
+# Unset the X-Frame-Options header if it is being set
+Header always unset X-Frame-Options
+
+# Set Content-Security-Policy to allow framing from specific origin
+Header always append Content-Security-Policy "frame-ancestors https://impan.smarthost.pl"
+

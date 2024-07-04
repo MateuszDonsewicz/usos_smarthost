@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grupy Zatrudnienia</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/staff">Lista Pracowników</a>
+        <a href="/employment-groups">Grupy Zatrudnienia</a>
+    </nav>
+
+    <h2>Grupy Zatrudnienia</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nazwa</th>
+                <th>Nauczyciele Uniwersyteccy</th>
+                <th>Szczegóły</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% employment_groups.forEach(group => { %>
+            <tr>
+                <td><%= group.id %></td>
+                <td><%= group.name %></td>
+                <td><%= group.university_teachers %></td>
+                <td><a href="/employment-group/<%= group.id %>">Szczegóły</a></td>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</body>
+</html>
